@@ -90,6 +90,7 @@ def drop_tmdb_cols(tmdb_movies_df):
     tmdb_movies_df.drop(columns = ['id', 'original_title', 'original_language'], inplace = True)
     
     return tmdb_movies_df
+
     
 def convert_amount(amount):
     
@@ -215,6 +216,8 @@ def clean_tmdb_movies(tmdb_movies_df):
     tmdb_movies_df['genre_ids'] = tmdb_movies_df['genre_ids'].map(recast_genre)
     tmdb_movies_df = remove_non_en(tmdb_movies_df)
     tmdb_movies_df = drop_tmdb_cols(tmdb_movies_df)
+    #Will write an external function for this
+    tmdb_movies_df = tmdb_movies_df[tmdb_movies_df['vote_count'] > 100]
     
     return tmdb_movies_df
 
