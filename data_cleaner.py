@@ -41,15 +41,7 @@ def recast_genre(genre_id_list):
 
 
 def remove_non_en(tmdb_movies_df):
-    
-    """Removes any non english movies from the DataFrame
-    
-    Parameters:
-    tmdb_movies_df: A DataFrame of the data from tmdb.movies.csv
-    
-    Returns:
-    DataFrame: tmdb_movies_df with only english movies
-    """
+    """Removes any non english movies from the DataFrame"""
 
     tmdb_movies_df = tmdb_movies_df[tmdb_movies_df['original_language'] == 'en']
     
@@ -68,23 +60,18 @@ def drop_tmdb_cols(tmdb_movies_df):
     DataFrame: tmdb_movies_df with the id, original_title, and original_language, and 
                release_date columns dropped from the DataFrame
     """
-    tmdb_movies_df = tmdb_movies_df[tmdb_movies_df['release_date'].str[:4].map(lambda x: int(x)) >= 2010]
+    tmdb_movies_df = tmdb_movies_df[tmdb_movies_df['release_date']. \
+                                    str[:4].map(lambda x: int(x)) >= 2010]
     tmdb_movies_df.drop('release_date', axis = 1, inplace = True)
-    tmdb_movies_df.drop(columns = ['id', 'original_title', 'original_language'], inplace = True)
+    tmdb_movies_df.drop(columns = ['Unnamed: 0', 'id', 'original_title',
+                                   'original_language'], inplace = True)
     
     return tmdb_movies_df
 
     
 def convert_amount(amount):
     
-    """Converts a dollar amount in the form '$123,456,789' to a float
-    
-    Parameters:
-    amount: A string containing a dollar amount
-    
-    Returns:
-    float: A float of the dollar amount
-    """
+    """Converts a dollar amount in the form '$123,456,789' to a float"""
     
     return float(amount[1:].replace(',','')) #remove $ and ,
 
@@ -199,7 +186,6 @@ def clean_tmdb_movies(tmdb_movies_df):
     tmdb_movies_df['genre_ids'] = tmdb_movies_df['genre_ids'].map(recast_genre)
     tmdb_movies_df = remove_non_en(tmdb_movies_df)
     tmdb_movies_df = drop_tmdb_cols(tmdb_movies_df)
-    #Will write an external function for this
     tmdb_movies_df = tmdb_movies_df[tmdb_movies_df['vote_count'] > 100]
     
     return tmdb_movies_df
@@ -236,10 +222,11 @@ def join_dataframes(clean_tmdb_movies_df, clean_mb_df):
     DataFrame: A joined DataFrame from the two cleaned DataFrames
     """
     clean_mb_df.rename(columns = {'movie': 'title'}, inplace = True) #rename 'movie'
+    clean_tmdb_movies_df.rename(columns = {'genre_ids': 'genres'}, inplace = True) #Rename genre_ids column
     clean_mb_df.set_index('title',inplace = True) #Set index to title
+    clean_mb_df.drop(columns = ['id'], inplace = True)  
     clean_tmdb_movies_df.set_index('title',inplace = True) #set index to title
     joined_movie_df = clean_tmdb_movies_df.join(clean_mb_df, how = 'inner', rsuffix = '_budget') #join on title
-    joined_movie_df.drop(columns = ['Unnamed: 0', 'id'], inplace = True)   
     joined_movie_df = joined_movie_df[~joined_movie_df.index.duplicated(keep='first')] #drop duplicates
     joined_movie_df.dropna(inplace = True) #drop nulls
     
