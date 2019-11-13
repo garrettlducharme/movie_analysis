@@ -1,20 +1,3 @@
-"""
-TO DO:
-- A function that drops movies that don't make money
-- Functions to remove duplicates from each data set
-- Functions to remove columns we don't need. This will probably be vote_count and language
-- A function to filter out all movies before 2010
-- Convert budgets and profits to millions
-- A function to drop everything but English movies
-  
-- Non-technical and technical markdowns need to be put together
-     - 
-     
-- Outline the assumptions in the presentation
-
-- Popularity vs ratings 
-"""
-
 def genre_ids_to_list(genre_ids):
     
     """Converts a string of genre ids from tmdb.movies.csv to a list
