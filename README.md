@@ -50,6 +50,10 @@ Notebook with markdown and technical details about the data cleaning and analysi
 
 Notebook with plots and tables that provide a narrative of the findings as opposed to a technical writeup
 
+### movie_analysis_presentation.pdf
+
+A pdf of the slide deck used to present this work
+
 ### img
 
 Folder containing images for the nontechnical notebook
